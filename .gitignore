@@ -1,0 +1,26 @@
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+
+# Data files and models
+*.pkl
+*.csv
+
+# Mage logs and runtime artifacts
+mage.log
+.mage/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Testing
+.pytest_cache/
