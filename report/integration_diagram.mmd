@@ -1,0 +1,36 @@
+flowchart TD
+    subgraph SCM["1. Source Control & CI/CD"]
+        Dev["Developer Laptop<br/>(Git Working Folder)"] -->|"git commit"| LocalRepo["Local Git Repo"]
+        LocalRepo -->|"git push"| RemoteRepo["GitHub Repository<br/>(freshcart-pipelines)"]
+        RemoteRepo -->|"Webhook trigger"| GHActions["GitHub Actions CI<br/>(Python 3.12 + Pytest)"]
+    end
+
+    subgraph Streaming["2. Event Streaming (RabbitMQ)"]
+        Dispatcher["dispatcher.py<br/>(Publishes every 2s)"] -->|"Exchange: rapido-dispatch<br/>(Topic)"| Exch{"Topic Exchange<br/>rapido-dispatch"}
+        Exch -->|"bangalore.koramangala.*"| DriverRavi["Driver: Ravi<br/>(Queue 1)"]
+        Exch -->|"bangalore.*.ride"| DriverArjun["Driver: Arjun<br/>(Queue 2)"]
+        Exch -->|"bangalore.#"| DriverControl["Driver: Control<br/>(Queue 3)"]
+        Exch -.->|"FreshCart Orders<br/>(Bonus Pipeline)"| StreamConsumer["Landing Consumer<br/>write_landing()"]
+    end
+
+    subgraph ELT["3. FreshCart ELT on Snowflake"]
+        RawFiles["Raw API JSON / Landing"] -->|"PUT + COPY INTO"| Bronze["Bronze Layer<br/>bronze.orders_raw"]
+        Bronze -->|"SQL_10_ORDERS_CLEAN<br/>Validation Array"| SilverChecked["Silver Layer<br/>silver.orders_checked"]
+        SilverChecked -->|"Deduplication & Quarantine"| SilverDedup["silver.orders_dedup<br/>silver.orders_quarantine"]
+        SilverDedup -->|"SCD Type 2 Join"| DimCustomers["dim.customers_scd2<br/>(CRM Tier Events)"]
+        DimCustomers -->|"Idempotent MERGE"| Gold["Gold Layer<br/>gold.orders / gold.fct_orders"]
+        Gold -->|"Automated Check"| QualityGate{"quality_checks()<br/>Defects == 0"}
+    end
+
+    subgraph ML["4. Mage ML Pipeline (Iris Classifier)"]
+        LoadData["data_loader<br/>load_iris"] --> PrepareData["transformer<br/>prepare_data (80/20 split)"]
+        PrepareData --> TrainDT["transformer<br/>train_model (DecisionTree)"]
+        PrepareData --> TrainKNN["transformer<br/>train_knn (KNN Branch)"]
+        TrainDT --> AccuracyTest{"@test test_accuracy<br/>(Accuracy >= 90%)"}
+        AccuracyTest -->|"Pass"| SaveResults["data_exporter<br/>save_results.py -> CSV"]
+        AccuracyTest -->|"Pass"| EvalModel["transformer<br/>evaluate_model.py"]
+        AccuracyTest -.->|"Fail (depth=1)"| BlockExport["Block Execution<br/>(CSV Not Created)"]
+    end
+
+    StreamConsumer -.->|"COPY INTO bronze"| Bronze
+    Gold -.->|"Analytics / Training Feed"| ML
