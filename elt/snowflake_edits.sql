@@ -1,106 +1,84 @@
 -- =====================================================================
--- FreshCart ELT Pipeline Edits (Part B)
+-- FreshCart ELT Pipeline Edits (Part B - Verified against Course Notebook)
+-- Source of Truth: material/07-10-2026/freshcart_elt_commented.ipynb
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
 -- Edit (a): SQL_10_ORDERS_CLEAN
--- Add validation reason 'unsupported_currency' for any currency != INR/USD
+-- Add validation reason 'unsupported_currency' inside ARRAY_CONSTRUCT_COMPACT(...)
+-- Location: Cell 17 in freshcart_elt_commented.ipynb
 -- ---------------------------------------------------------------------
 /*
-DIFF REVIEW:
---- a/SQL_10_ORDERS_CLEAN
-+++ b/SQL_10_ORDERS_CLEAN
-@@ -10,6 +10,7 @@
-     ARRAY_CONSTRUCT_COMPACT(
-         IFF(order_id IS NULL, 'missing_order_id', NULL),
-         IFF(amount IS NULL OR amount <= 0, 'invalid_amount', NULL),
-+        IFF(currency NOT IN ('INR', 'USD'), 'unsupported_currency', NULL)
-     ) AS reasons
+--- a/SQL_10_ORDERS_CLEAN (Cell 17)
++++ b/SQL_10_ORDERS_CLEAN (Cell 17)
+@@ -40,6 +40,7 @@
+     IFF(pincode IS NULL OR NOT REGEXP_LIKE(pincode, '^[1-9][0-9]{5}$'), 'bad_pincode', NULL),
+     IFF(order_date IS NULL, 'unparseable_date', NULL),
+     IFF(updated_at IS NULL, 'unparseable_updated_at', NULL),
+-    IFF(amount <= 0, 'non_positive_amount', NULL)          -- NULL amount is allowed (flagged below)
++    IFF(amount <= 0, 'non_positive_amount', NULL),          -- NULL amount is allowed (flagged below)
++    IFF(currency NOT IN ('INR', 'USD'), 'unsupported_currency', NULL)
+   ) AS reasons
+ FROM typed;
 */
-
--- Full updated snippet for SQL_10_ORDERS_CLEAN:
-CREATE OR REPLACE VIEW silver.orders_checked AS
-SELECT
-    raw:order_id::STRING AS order_id,
-    raw:customer_id::STRING AS customer_id,
-    raw:order_date::DATE AS order_date,
-    raw:amount::NUMBER(10, 2) AS amount,
-    raw:currency::STRING AS currency,
-    raw:updated_at::TIMESTAMP_NTZ AS updated_at,
-    ARRAY_CONSTRUCT_COMPACT(
-        IFF(raw:order_id IS NULL, 'missing_order_id', NULL),
-        IFF(raw:amount IS NULL OR raw:amount <= 0, 'invalid_amount', NULL),
-        IFF(raw:currency NOT IN ('INR', 'USD'), 'unsupported_currency', NULL)
-    ) AS reasons
-FROM bronze.orders_raw;
 
 
 -- ---------------------------------------------------------------------
--- Edit (b): Sixth quality check in quality_checks()
--- Must equal 0: gold orders with loyalty_points < 0
+-- Edit (b): Sixth quality check in quality_checks() checks dictionary
+-- Must equal 0: gold orders with loyalty_points < 0 in gold.fct_orders
+-- Location: Cell 24 in freshcart_elt_commented.ipynb
 -- ---------------------------------------------------------------------
 /*
-DIFF REVIEW:
---- a/quality_checks()
-+++ b/quality_checks()
-@@ -20,6 +20,10 @@
-+    SELECT 'gold_negative_loyalty_points' AS check_name,
-+           COUNT(*) AS problem_count
-+    FROM gold.orders
-+    WHERE loyalty_points < 0
+--- a/quality_checks() (Cell 24)
++++ b/quality_checks() (Cell 24)
+@@ -10,6 +10,8 @@
+         "orders with an amount but no FX rate":
+             "SELECT COUNT_IF(amount IS NOT NULL AND fx_rate IS NULL) FROM silver.orders_enriched",
+         "orders with no city":
+             "SELECT COUNT_IF(city IS NULL) FROM silver.orders_enriched",
++        "gold orders with loyalty_points < 0":
++            "SELECT COUNT_IF(loyalty_points < 0) FROM gold.fct_orders",
+     }
 */
 
--- Example addition to quality_checks procedure/query:
-SELECT 'gold_negative_loyalty_points' AS check_name,
-       COUNT(*) AS problem_count
-FROM gold.orders
-WHERE loyalty_points < 0;
-
 
 -- ---------------------------------------------------------------------
--- Edit (c): Mock order to make check fail, plus removal statement
+-- Edit (c): Mock order to make quality check fail, with removal step
+-- Entered the same way as other notebook mock data (MOCK_WEB_ORDERS in Cell 6)
+-- and via direct query() to gold.fct_orders
 -- ---------------------------------------------------------------------
 
--- 1. Insert failing mock record (negative loyalty points)
-INSERT INTO gold.orders (
-    order_id,
-    customer_id,
-    order_date,
-    amount,
-    currency,
-    amount_inr,
-    loyalty_points,
-    published_at
+-- Option 1: Direct SQL test on gold.fct_orders (using notebook query() helper)
+/*
+query("""
+INSERT INTO gold.fct_orders (
+    order_id, order_date, cust_id, email, tier, multiplier,
+    amount, currency, fx_rate, amount_inr, loyalty_points,
+    is_high_value, city, state, region, updated_at, row_hash, published_at
 )
 VALUES (
-    'ORD-MOCK-FAIL-01',
-    'CUST-02',
-    CURRENT_DATE(),
-    1500.00,
-    'INR',
-    1500.00,
-    -25,
-    CURRENT_TIMESTAMP()
+    'ORD-MOCK-FAIL', '2026-09-01', 'CUST-02', 'arjun.k@yahoo.in', 'Gold', 2,
+    1250.00, 'INR', 1.0, 1250.00, -25, FALSE, 'Bengaluru', 'Karnataka', 'South',
+    '2026-09-01 10:00:00', 99999, CURRENT_TIMESTAMP()
 );
+""")
 
--- 2. Removal statement to clean up mock order
-DELETE FROM gold.orders
-WHERE order_id = 'ORD-MOCK-FAIL-01';
+-- Removal statement:
+query("DELETE FROM gold.fct_orders WHERE order_id = 'ORD-MOCK-FAIL'")
+*/
 
 
 -- ---------------------------------------------------------------------
--- Edit (d): New MOCK_CRM_TIER_EVENTS row for Arjun
--- CUST-02, arjun.k@yahoo.in, Gold, effective_from = 2026-08-15
+-- Edit (d): New CRM tier event for Arjun added to MOCK_CRM_TIER_EVENTS
+-- Location: Cell 6 in freshcart_elt_commented.ipynb
 -- ---------------------------------------------------------------------
-INSERT INTO ref.mock_crm_tier_events (
-    customer_id,
-    customer_email,
-    tier,
-    effective_from
-)
-VALUES (
-    'CUST-02',
-    'arjun.k@yahoo.in',
-    'Gold',
-    '2026-08-15'::DATE
-);
+/*
+--- a/MOCK_CRM_TIER_EVENTS (Cell 6)
++++ b/MOCK_CRM_TIER_EVENTS (Cell 6)
+@@ -35,6 +35,7 @@
+     {"cust_id": "CUST-01", "email": "priya.r@gmail.com", "tier": "Gold", "effective_from": "2026-09-03"},
+     {"cust_id": "CUST-02", "email": "arjun.k@yahoo.in", "tier": "Silver", "effective_from": "2024-01-15"},
++    {"cust_id": "CUST-02", "email": "arjun.k@yahoo.in", "tier": "Gold", "effective_from": "2026-08-15"},
+     {"cust_id": "CUST-03", "email": "meera@outlook.com", "tier": "Platinum", "effective_from": "2022-11-01"},
+ ]
+*/
