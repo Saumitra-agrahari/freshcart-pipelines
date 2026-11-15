@@ -222,9 +222,9 @@ flowchart TD
     subgraph ELT["3. FreshCart ELT on Snowflake"]
         RawFiles["Raw API JSON / Landing"] -->|"PUT + COPY INTO"| Bronze["Bronze Layer<br/>bronze.orders_raw"]
         Bronze -->|"SQL_10_ORDERS_CLEAN<br/>Validation Array"| SilverChecked["Silver Layer<br/>silver.orders_checked"]
-        SilverChecked -->|"Deduplication & Quarantine"| SilverDedup["silver.orders_dedup<br/>silver.orders_quarantine"]
+        SilverChecked -->|"Deduplication & Quarantine"| SilverDedup["silver.orders_dedup<br/>quarantine.orders"]
         SilverDedup -->|"SCD Type 2 Join"| DimCustomers["dim.customers_scd2<br/>(CRM Tier Events)"]
-        DimCustomers -->|"Idempotent MERGE"| Gold["Gold Layer<br/>gold.orders / gold.fct_orders"]
+        DimCustomers -->|"Idempotent MERGE"| Gold["Gold Layer<br/>gold.fct_orders"]
         Gold -->|"Automated Check"| QualityGate{"quality_checks()<br/>Defects == 0"}
     end
 
