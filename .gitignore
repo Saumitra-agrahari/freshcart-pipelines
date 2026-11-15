@@ -24,3 +24,6 @@ ENV/
 
 # Testing
 .pytest_cache/
+
+material/
+.venv/
