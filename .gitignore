@@ -27,3 +27,5 @@ ENV/
 
 material/
 .venv/
+
+.mage_data/
