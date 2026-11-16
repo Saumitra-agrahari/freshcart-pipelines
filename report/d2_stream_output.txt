@@ -1,0 +1,66 @@
+[Control] Driver 'Control' listening on pattern 'bangalore.#' (queue: amq.gen-oB3cieZLxYBl3K3uhuicdQ)
+[Control] Waiting for dispatch messages. Press Ctrl+C to exit.
+[Control] 
+[Arjun] Driver 'Arjun' listening on pattern 'bangalore.*.ride' (queue: amq.gen-64viJza9vciHSt5f2OcV0A)
+[Arjun] Waiting for dispatch messages. Press Ctrl+C to exit.
+[Arjun] 
+[Ravi] Driver 'Ravi' listening on pattern 'bangalore.koramangala.*' (queue: amq.gen-KIlCq6BGLgM64pRTsv7yxg)
+[Ravi] Waiting for dispatch messages. Press Ctrl+C to exit.
+[Ravi] 
+[Dispatcher] Connecting to RabbitMQ broker at amqp://guest:guest@localhost:5672/...
+[Dispatcher] Declared topic exchange: 'rapido-dispatch'
+[Dispatcher] Starting dispatch loop (publishing every 2 seconds). Press Ctrl+C to stop.
+[Dispatcher] 
+[Dispatcher] [Dispatcher] Published REQ-0001 -> key='bangalore.jayanagar.food': {'id': 'REQ-0001', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:08.680712+00:00', 'zone': 'jayanagar'}
+[Control] [Control] ACCEPTED request REQ-0001: Bangalore / jayanagar / food (ts=2026-11-16T09:01:08.680712+00:00) [key='bangalore.jayanagar.food']
+[Dispatcher] [Dispatcher] Published REQ-0002 -> key='chennai.velachery.ride': {'id': 'REQ-0002', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:10.684026+00:00', 'zone': 'velachery'}
+[Dispatcher] [Dispatcher] Published REQ-0003 -> key='bangalore.indiranagar.ride': {'id': 'REQ-0003', 'city': 'Bangalore', 'type': 'ride', 'ts': '2026-11-16T09:01:12.695996+00:00', 'zone': 'indiranagar'}
+[Arjun] [Arjun] ACCEPTED request REQ-0003: Bangalore / indiranagar / ride (ts=2026-11-16T09:01:12.695996+00:00) [key='bangalore.indiranagar.ride']
+[Control] [Control] ACCEPTED request REQ-0003: Bangalore / indiranagar / ride (ts=2026-11-16T09:01:12.695996+00:00) [key='bangalore.indiranagar.ride']
+[Dispatcher] [Dispatcher] Published REQ-0004 -> key='bangalore.jayanagar.food': {'id': 'REQ-0004', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:14.701689+00:00', 'zone': 'jayanagar'}
+[Control] [Control] ACCEPTED request REQ-0004: Bangalore / jayanagar / food (ts=2026-11-16T09:01:14.701689+00:00) [key='bangalore.jayanagar.food']
+[Dispatcher] [Dispatcher] Published REQ-0005 -> key='chennai.whitefield.ride': {'id': 'REQ-0005', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:16.703275+00:00', 'zone': 'whitefield'}
+[Dispatcher] [Dispatcher] Published REQ-0006 -> key='chennai.velachery.ride': {'id': 'REQ-0006', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:18.704548+00:00', 'zone': 'velachery'}
+[Dispatcher] [Dispatcher] Published REQ-0007 -> key='chennai.velachery.food': {'id': 'REQ-0007', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:20.706140+00:00', 'zone': 'velachery'}
+[Dispatcher] [Dispatcher] Published REQ-0008 -> key='chennai.whitefield.ride': {'id': 'REQ-0008', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:22.706948+00:00', 'zone': 'whitefield'}
+[Dispatcher] [Dispatcher] Published REQ-0009 -> key='chennai.tnagar.ride': {'id': 'REQ-0009', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:24.707871+00:00', 'zone': 'tnagar'}
+[Dispatcher] [!] Dispatcher generating test NACK message (omitting zone for REQ-0010)
+[Dispatcher] [Dispatcher] Published REQ-0010 -> key='chennai.adyar.food' (MISSING ZONE): {'id': 'REQ-0010', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:26.708997+00:00'}
+[Dispatcher] [Dispatcher] Published REQ-0011 -> key='bangalore.indiranagar.food': {'id': 'REQ-0011', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:28.711243+00:00', 'zone': 'indiranagar'}
+[Control] [Control] ACCEPTED request REQ-0011: Bangalore / indiranagar / food (ts=2026-11-16T09:01:28.711243+00:00) [key='bangalore.indiranagar.food']
+[Dispatcher] [Dispatcher] Published REQ-0012 -> key='chennai.whitefield.food': {'id': 'REQ-0012', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:30.712589+00:00', 'zone': 'whitefield'}
+[Dispatcher] [Dispatcher] Published REQ-0013 -> key='chennai.tnagar.food': {'id': 'REQ-0013', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:32.713850+00:00', 'zone': 'tnagar'}
+[Dispatcher] [Dispatcher] Published REQ-0014 -> key='bangalore.koramangala.ride': {'id': 'REQ-0014', 'city': 'Bangalore', 'type': 'ride', 'ts': '2026-11-16T09:01:34.715282+00:00', 'zone': 'koramangala'}
+[Control] [Control] ACCEPTED request REQ-0014: Bangalore / koramangala / ride (ts=2026-11-16T09:01:34.715282+00:00) [key='bangalore.koramangala.ride']
+[Arjun] [Arjun] ACCEPTED request REQ-0014: Bangalore / koramangala / ride (ts=2026-11-16T09:01:34.715282+00:00) [key='bangalore.koramangala.ride']
+[Ravi] [Ravi] ACCEPTED request REQ-0014: Bangalore / koramangala / ride (ts=2026-11-16T09:01:34.715282+00:00) [key='bangalore.koramangala.ride']
+[Dispatcher] [Dispatcher] Published REQ-0015 -> key='chennai.whitefield.food': {'id': 'REQ-0015', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:36.717243+00:00', 'zone': 'whitefield'}
+[Dispatcher] [Dispatcher] Published REQ-0016 -> key='bangalore.koramangala.food': {'id': 'REQ-0016', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:38.719156+00:00', 'zone': 'koramangala'}
+[Control] [Control] ACCEPTED request REQ-0016: Bangalore / koramangala / food (ts=2026-11-16T09:01:38.719156+00:00) [key='bangalore.koramangala.food']
+[Ravi] [Ravi] ACCEPTED request REQ-0016: Bangalore / koramangala / food (ts=2026-11-16T09:01:38.719156+00:00) [key='bangalore.koramangala.food']
+[Dispatcher] [Dispatcher] Published REQ-0017 -> key='chennai.adyar.food': {'id': 'REQ-0017', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:40.731039+00:00', 'zone': 'adyar'}
+[Dispatcher] [Dispatcher] Published REQ-0018 -> key='chennai.velachery.ride': {'id': 'REQ-0018', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:42.756865+00:00', 'zone': 'velachery'}
+[Dispatcher] [Dispatcher] Published REQ-0019 -> key='chennai.velachery.food': {'id': 'REQ-0019', 'city': 'Chennai', 'type': 'food', 'ts': '2026-11-16T09:01:44.759040+00:00', 'zone': 'velachery'}
+[Dispatcher] [!] Dispatcher generating test NACK message (omitting zone for REQ-0020)
+[Dispatcher] [Dispatcher] Published REQ-0020 -> key='bangalore.indiranagar.ride' (MISSING ZONE): {'id': 'REQ-0020', 'city': 'Bangalore', 'type': 'ride', 'ts': '2026-11-16T09:01:46.760343+00:00'}
+[Arjun] [Arjun] REJECTED request REQ-0020 [key='bangalore.indiranagar.ride'] -> missing 'zone' field!
+[Control] [Control] REJECTED request REQ-0020 [key='bangalore.indiranagar.ride'] -> missing 'zone' field!
+[Dispatcher] [Dispatcher] Published REQ-0021 -> key='chennai.tnagar.ride': {'id': 'REQ-0021', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:48.762428+00:00', 'zone': 'tnagar'}
+[Dispatcher] [Dispatcher] Published REQ-0022 -> key='bangalore.jayanagar.food': {'id': 'REQ-0022', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:50.764069+00:00', 'zone': 'jayanagar'}
+[Control] [Control] ACCEPTED request REQ-0022: Bangalore / jayanagar / food (ts=2026-11-16T09:01:50.764069+00:00) [key='bangalore.jayanagar.food']
+[Dispatcher] [Dispatcher] Published REQ-0023 -> key='chennai.adyar.ride': {'id': 'REQ-0023', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:52.769316+00:00', 'zone': 'adyar'}
+[Dispatcher] [Dispatcher] Published REQ-0024 -> key='chennai.tnagar.ride': {'id': 'REQ-0024', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:01:54.771134+00:00', 'zone': 'tnagar'}
+[Dispatcher] [Dispatcher] Published REQ-0025 -> key='bangalore.jayanagar.ride': {'id': 'REQ-0025', 'city': 'Bangalore', 'type': 'ride', 'ts': '2026-11-16T09:01:56.772689+00:00', 'zone': 'jayanagar'}
+[Control] [Control] ACCEPTED request REQ-0025: Bangalore / jayanagar / ride (ts=2026-11-16T09:01:56.772689+00:00) [key='bangalore.jayanagar.ride']
+[Arjun] [Arjun] ACCEPTED request REQ-0025: Bangalore / jayanagar / ride (ts=2026-11-16T09:01:56.772689+00:00) [key='bangalore.jayanagar.ride']
+[Dispatcher] [Dispatcher] Published REQ-0026 -> key='bangalore.koramangala.food': {'id': 'REQ-0026', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:01:58.773971+00:00', 'zone': 'koramangala'}
+[Control] [Control] ACCEPTED request REQ-0026: Bangalore / koramangala / food (ts=2026-11-16T09:01:58.773971+00:00) [key='bangalore.koramangala.food']
+[Ravi] [Ravi] ACCEPTED request REQ-0026: Bangalore / koramangala / food (ts=2026-11-16T09:01:58.773971+00:00) [key='bangalore.koramangala.food']
+[Dispatcher] [Dispatcher] Published REQ-0027 -> key='bangalore.indiranagar.food': {'id': 'REQ-0027', 'city': 'Bangalore', 'type': 'food', 'ts': '2026-11-16T09:02:00.775447+00:00', 'zone': 'indiranagar'}
+[Control] [Control] ACCEPTED request REQ-0027: Bangalore / indiranagar / food (ts=2026-11-16T09:02:00.775447+00:00) [key='bangalore.indiranagar.food']
+[Dispatcher] [Dispatcher] Published REQ-0028 -> key='chennai.adyar.ride': {'id': 'REQ-0028', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:02:02.776885+00:00', 'zone': 'adyar'}
+[Dispatcher] [Dispatcher] Published REQ-0029 -> key='chennai.tnagar.ride': {'id': 'REQ-0029', 'city': 'Chennai', 'type': 'ride', 'ts': '2026-11-16T09:02:04.778247+00:00', 'zone': 'tnagar'}
+[Dispatcher] [!] Dispatcher generating test NACK message (omitting zone for REQ-0030)
+[Dispatcher] [Dispatcher] Published REQ-0030 -> key='bangalore.indiranagar.ride' (MISSING ZONE): {'id': 'REQ-0030', 'city': 'Bangalore', 'type': 'ride', 'ts': '2026-11-16T09:02:06.779027+00:00'}
+[Arjun] [Arjun] REJECTED request REQ-0030 [key='bangalore.indiranagar.ride'] -> missing 'zone' field!
+[Control] [Control] REJECTED request REQ-0030 [key='bangalore.indiranagar.ride'] -> missing 'zone' field!
