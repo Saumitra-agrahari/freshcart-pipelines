@@ -42,12 +42,11 @@ def train_knn(df: pd.DataFrame, *args, **kwargs) -> Dict[str, Any]:
     print(f"\n[train_knn (Parallel Branch)] KNeighborsClassifier(n_neighbors=5) | Test Accuracy = {acc:.4f}\n")
 
     return {
-        'model': knn,
         'model_name': 'KNeighborsClassifier',
         'n_neighbors': 5,
         'accuracy': acc,
-        'y_test': y_test,
-        'y_pred': y_pred
+        'y_test': y_test.tolist(),
+        'y_pred': y_pred.tolist(),
     }
 
 

@@ -54,13 +54,11 @@ def train(df: pd.DataFrame, *args, **kwargs) -> Dict[str, Any]:
     predictions_df['predicted'] = y_pred
 
     return {
-        'model': clf,
         'model_name': 'DecisionTreeClassifier',
         'max_depth': max_depth,
         'accuracy': acc,
-        'X_test': X_test,
-        'y_test': y_test,
-        'y_pred': y_pred,
+        'y_test': y_test.tolist(),
+        'y_pred': y_pred.tolist(),
         'predictions_df': predictions_df,
     }
 
